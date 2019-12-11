@@ -5,41 +5,52 @@
  */
 package ru.avalon.java.ocpjp.labs.actions;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static java.lang.System.out;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
  * @author JAVA
  */
 public class FileCreateAction implements Action{
-    String file = "Exam808_SampleQuestion.pdf";
-    String path = "D:\\Users\\Bozhenkov\\lab2\\";
-public void create() throws IOException{
-    File f = new File(path, file);
-    if(f.isFile()){
-        System.out.println("File is already existed");
-    }else {
-    boolean created = f.createNewFile();
-    if(created)
-        System.out.println("File created");
+
+    private Path target;
+    private char type;
+
+    public FileCreateAction(char type, String target) {
+        this.type = type;
+        this.target = Paths.get(target);
+
     }
-}
-    @Override
-    public void run() {
-        try {
-            create();
-        } catch (IOException ex) {
-            Logger.getLogger(FileCreateAction.class.getName()).log(Level.SEVERE, null, ex);
+
+    private synchronized void create() {
+        if (Files.exists(target)) {
+            out.printf("%s cannot be created because of same object exist.", target.getFileName().toString());
+        } else {
+            try {
+                if (type != 'd') {
+                    Files.createFile(target);
+                    out.printf("%s has been created",
+                            target.getFileName().toString());
+                } else {
+                    Files.createDirectories(target);
+                    out.printf("%s has been created%n>>",
+                            target.getFileName().toString());
+                }
+            } catch (IOException ex) {
+                ex.getMessage();
+                close();
+            } finally {
+                close();
+            }
         }
-        
     }
 
     @Override
-    public void close() throws Exception {
-       
+    public void run() {
+        create();
     }
-    
 }
