@@ -1,45 +1,60 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.avalon.java.ocpjp.labs.actions;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
- *
- * @author JAVA
+ * Действие, которое создает файлы в пределах дискового пространства.
  */
-public class FileCreateAction implements Action{
-    String file = "Exam808_SampleQuestion.pdf";
-    String path = "D:\\Users\\Bozhenkov\\lab2\\";
-public void create() throws IOException{
-    File f = new File(path, file);
-    if(f.isFile()){
-        System.out.println("File is already existed");
-    }else {
-    boolean created = f.createNewFile();
-    if(created)
-        System.out.println("File created");
+public class FileCreateAction implements Action {
+
+    // хранение пути создаваемого файла.
+    private Path to;
+
+    /**
+     * Конструктор класса.
+     * @param to - путь создаваемого файла.
+     */
+    public FileCreateAction(Path to) {
+        this.to = to;
     }
-}
+
+    private void create() throws IOException {
+        Files.createFile(to);
+        try {
+            close();
+        } catch (Exception ignore) {
+        } finally {
+            service.shutdownNow();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run() {
         try {
             create();
-        } catch (IOException ex) {
-            Logger.getLogger(FileCreateAction.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                close();
+            } catch (Exception ignore) {
+            } finally {
+                service.shutdownNow();
+            }
         }
-        
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() throws Exception {
-       
+        service.shutdown();
     }
     
 }
