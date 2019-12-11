@@ -1,59 +1,42 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ru.avalon.java.ocpjp.labs.actions;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.File;
 
 /**
- * Действие, которое удаляет файлы в пределах дискового пространства.
+ *
+ * @author JAVA
  */
-public class FileDeleteAction implements Action {
+public class FileDeleteAction implements Action{
 
-    // хранение пути удаляемого файла.
-    private Path from;
-
-    /**
-     * Конструктор класса.
-     * @param from - путь удаляемого файла.
-     */
-    public FileDeleteAction(Path from) {
-        this.from = from;
-    }
-
-    private void delete() throws IOException {
-        Files.delete(from);
-        try {
-            close();
-        } catch (Exception ignore) {
-        } finally {
-            service.shutdownNow();
+     String file = "Exam808_SampleQuestion.pdf";
+    String path = "D:\\Users\\Bozhenkov\\lab2\\";
+    public void delete(){
+        
+        File f = new File(path, file);
+        if(f.isFile()){
+        boolean deleted = f.delete();
+        if(deleted)
+            System.out.println("File deleted");
+        } else {
+            System.out.println("File not found");
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     @Override
     public void run() {
-        try {
-            delete();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                close();
-            } catch (Exception ignore) {
-            } finally {
-                service.shutdownNow();
-            }
-        }
+        delete();
+        
+      
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void close() throws Exception {
-        service.shutdown();
+        
     }
+    
 }

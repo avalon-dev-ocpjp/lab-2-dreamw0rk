@@ -12,7 +12,6 @@ import java.io.*;
  *            из потока.
  */
 public class EnumReader<E extends Enum<E>> implements Closeable {
-    
     /**
      * Читатель потока
      */
@@ -36,7 +35,6 @@ public class EnumReader<E extends Enum<E>> implements Closeable {
         this.cls = cls;
         in  = new BufferedReader(new InputStreamReader(stream));
     }
-    
     /**
      * Возвращает следующий экземпляр пересиления из потока.
      * 
@@ -51,7 +49,6 @@ public class EnumReader<E extends Enum<E>> implements Closeable {
             throw new IOException(e.getMessage(), e);
         }
     }
-    
     /**
      * ОСвобождает ресурсы, связанные с экземпляром класса.
      * 
@@ -63,4 +60,5 @@ public class EnumReader<E extends Enum<E>> implements Closeable {
         in = null;
         cls = null;
     }
+
 }
