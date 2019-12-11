@@ -6,6 +6,11 @@
 package ru.avalon.java.ocpjp.labs.actions;
 
 import java.io.File;
+import java.io.IOException;
+import static java.lang.System.out;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -13,30 +18,31 @@ import java.io.File;
  */
 public class FileDeleteAction implements Action{
 
-     String file = "Exam808_SampleQuestion.pdf";
-    String path = "D:\\Users\\Bozhenkov\\lab2\\";
-    public void delete(){
-        
-        File f = new File(path, file);
-        if(f.isFile()){
-        boolean deleted = f.delete();
-        if(deleted)
-            System.out.println("File deleted");
-        } else {
-            System.out.println("File not found");
-        }
+    private Path target;
+
+    public FileDeleteAction(String target) {
+        this.target = Paths.get(target);
     }
-    
-    @Override
-    public void run() {
-        delete();
-        
-      
+
+    private synchronized void delete() {
+        if (!Files.exists(target)) {
+            out.printf("%s does not exist.", target.getFileName().toString());
+        } else {
+            try {
+                Files.delete(target);
+                out.printf("%s has been deleted",
+                        target.getFileName().toString());
+            } catch (IOException ex) {
+                ex.getMessage();
+            } finally {
+                close();
+            }
+        }
     }
 
     @Override
-    public void close() throws Exception {
-        
+    public void run() {
+        delete();
     }
     
 }

@@ -4,12 +4,11 @@ package ru.avalon.java.ocpjp.labs;
  * Обрабатываемые приложением команды.
  */
 public enum Commands {
+    help,
     move,
     copy,
-    exit,
+    delete,
     create,
-    delete
-    /*
-     * TODO №8 К текущему списку команд, добавьте ещё две команды
-     */
+    exit
+    
 }
